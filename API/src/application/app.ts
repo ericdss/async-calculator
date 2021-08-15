@@ -3,6 +3,8 @@ import express from 'express';
 import database from '../infra/mongoose/db';
 
 import routes from './routes';
+import calculatorRoutes from './routes/CalculatorRoutes';
+import userRoutes from './routes/UserRoutes';
 
 
 class App
@@ -45,6 +47,12 @@ class App
 
 		// Index
 		this.app.use(routes);
+
+		// Users
+		this.app.use(basePath, userRoutes);
+
+		// Calculator
+		this.app.use(basePath, calculatorRoutes);
 	}
 }
 
