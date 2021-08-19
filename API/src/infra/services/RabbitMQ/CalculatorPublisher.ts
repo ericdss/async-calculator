@@ -18,7 +18,7 @@ class CalculatorPublisher implements IPublisher{
             await channel.assertExchange(exchange, 'direct', {durable: true});
 
             // Creating queue
-            await channel.assertQueue(queue, {durable: true, maxLength: 3});
+            await channel.assertQueue(queue, {durable: true});
 
             // Creating bind to associate the exchange and the queue
             await channel.bindQueue(queue, exchange, routingKey);
