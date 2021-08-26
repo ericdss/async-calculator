@@ -2,7 +2,7 @@ import { User } from '../../../domain/entities/User';
 import UserMapper from '../mappers/UserMapper';
 import UserModel from '../models/UserModel';
 
-class UsersRepository {
+class UserRepository {
 
     async getByEmail(email : string): Promise<User | null>{
         const resultSchema = await UserModel.findOne({email: email});
@@ -16,4 +16,4 @@ class UsersRepository {
     }
 }
 
-export { UsersRepository };
+export { UserRepository };

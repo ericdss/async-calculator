@@ -1,4 +1,15 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
+
+if(process.env.NODE_ENV)
+{
+	const env = process.env.NODE_ENV.toLowerCase().trim();
+
+	if(env == 'production' || env == "prd" || env == "prod")
+		dotenv.config({path: '.env'});
+	else
+		dotenv.config({path: '.env.' + env});
+}
+
 import express from 'express';
 import database from '../infra/mongoose/db';
 

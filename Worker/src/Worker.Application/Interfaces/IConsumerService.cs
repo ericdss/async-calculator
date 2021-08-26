@@ -1,12 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using RabbitMQ.Client;
 
 namespace Worker.Application.interfaces
 {
     public interface IConsumerService
     {
-        void Run();
+        void Run(string queueName, int workers);
     }
 }

@@ -8,8 +8,6 @@ using System.Threading;
 using Worker.Application.DTO;
 using Worker.Application.interfaces;
 using Worker.Domain.Interfaces;
-using Worker.Domain.Services;
-using Worker.Infra.Data.Repositories;
 
 namespace Worker.Application.Services
 {
@@ -24,47 +22,26 @@ namespace Worker.Application.Services
             _calculatorService = calculatorService;
         }
 
-        public void Run()
+        public void Run(string queueName, int workers)
         {
             string connectionString = Environment.GetEnvironmentVariable("AMQP_CONNECTIONSTRING") ?? _configuration["AMQP:ConnectionString"];
 
-            var factory = new ConnectionFactory();
-            factory.Uri = new Uri(connectionString);
+            var factory = new ConnectionFactory(){ Uri = new Uri(connectionString) };
 
             try
             {
                 using (var connection = factory.CreateConnection())
                 using (var channel = connection.CreateModel())
                 {
-                    channel.QueueDeclarePassive(queue: "sum");
+                    channel.QueueDeclarePassive(queue: queueName);
                     channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
                     Console.WriteLine("Waiting for messages.");
 
-                    var consumer = new EventingBasicConsumer(channel);
-
-                    consumer.Received += async (sender, ea) =>
+                    for (int i = 0; i < workers; i++)
                     {
-                        // Aguarda 2 seg
-                        Thread.Sleep(2000);
-
-                        var body = ea.Body.ToArray();
-                        var message = Encoding.UTF8.GetString(body);
-
-                        var entityId = JsonSerializer.Deserialize<EntityDTO>(message).Id;
-
-                        Console.WriteLine("Received {0}", entityId);
-
-                        //ICalculatorService _calculatorService = new CalculatorService(new CalculatorRepository());
-                        await _calculatorService.CalculateSum(entityId);
-
-                        // Commita o item da fila (Ack)
-                        channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
-                    };
-
-                    channel.BasicConsume(queue: "sum",
-                                         autoAck: false,
-                                         consumer: consumer);
+                        BuildAndRunWorker(channel, $"Worker {i}", queueName);
+                    }
 
                     Console.WriteLine("Press [enter] to exit.");
                     Console.ReadLine();
@@ -74,6 +51,49 @@ namespace Worker.Application.Services
             {
                 Console.WriteLine(e.Message);
             }
+        }
+
+        //private IModel CreateChannel(IConnection connection, string queueName)
+        //{
+        //    var channel = connection.CreateModel();
+
+        //    channel.QueueDeclarePassive(queue: queueName);
+
+        //    return channel;
+        //}
+
+        private void BuildAndRunWorker(IModel channel, string name, string queueName)
+        {
+            var consumer = new EventingBasicConsumer(channel);
+
+            consumer.Received += async (sender, ea) =>
+            {
+                try
+                {
+                    Thread.Sleep(2000);
+
+                    var body = ea.Body.ToArray();
+                    var message = Encoding.UTF8.GetString(body);
+
+                    var entityId = JsonSerializer.Deserialize<EntityDTO>(message).Id;
+
+                    Console.WriteLine("{0} on channel {1} processing {2}: ", name, channel.ChannelNumber, entityId);
+
+                    await _calculatorService.CalculateSum(entityId);
+
+                    // Commita o item da fila (Ack)
+                    channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            };
+
+            channel.BasicConsume(queue: queueName,
+                                 autoAck: false,
+                                 consumer: consumer);
         }
     }
 }

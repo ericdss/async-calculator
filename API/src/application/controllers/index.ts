@@ -1,10 +1,10 @@
-import { UsersRepository as UsersRepos } from "../../infra/mongoose/repositories/UsersRepository";
+import { UserRepository as UsersRepos } from "../../infra/mongoose/repositories/UserRepository";
 import { UserService as UsersServ } from "../../domain/services/User/UserService";
 import { UsersController as UsersCtrller } from "./UsersController";
 
 import { CalculatorRepository as CalculatorRepos } from "../../infra/mongoose/repositories/CalculatorRepository";
 import { CalculatorService as CalculatorServ } from "../../domain/services/Calculator/CalculatorService";
-import { CalculatorController as CalculatorCtrller } from "./CalculatorController";
+import { CalculatorController as CalculatorCtrller } from "./CalculatorsController";
 import { CalculatorPublisher as CalculatorPublish } from "../../infra/services/RabbitMQ/CalculatorPublisher";
 
 
@@ -18,6 +18,6 @@ const UsersControler = new UsersCtrller(UsersService);
 const CalculatorPublisher = new CalculatorPublish();
 const CalculatorRepository = new CalculatorRepos();
 const CalculatorService = new CalculatorServ(CalculatorRepository, CalculatorPublisher);
-const CalculatorControler = new CalculatorCtrller(CalculatorService);
+const CalculatorControler = new CalculatorCtrller(CalculatorService, CalculatorRepository);
 
 export { CalculatorControler, UsersControler };
