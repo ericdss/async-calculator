@@ -20,7 +20,7 @@ namespace Worker.UnitTests.Services
         }
 
         [Fact]
-        public async Task CalculateSum_ShouldCalculatureSumAndSaveResult()
+        public async Task CalculateSum_ShouldCalculateSumAndSaveResult()
         {
             Calculator calculator = new Calculator("123", 5, 5, Status.Pending, DateTime.Now);
             _calculatorRepositoryMock.Setup(x => x.GetById(It.IsAny<string>())).ReturnsAsync(calculator);
