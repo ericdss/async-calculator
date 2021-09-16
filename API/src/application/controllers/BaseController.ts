@@ -26,7 +26,7 @@ export default abstract class BaseController{
                 return mongoose.Types.ObjectId(_id);
             }              
         }
-        catch (error) {
+        catch (error: any) {
             throw new Error(error.message);
         }
     }

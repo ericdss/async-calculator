@@ -37,7 +37,7 @@ class UserService implements IUserService {
                 email: result.email
             };
         }
-        catch (error) {
+        catch (error: any) {
             throw new Error(error.message);
         }
         
@@ -71,7 +71,7 @@ class UserService implements IUserService {
                 }
             };
         }
-        catch (error) {
+        catch (error: any) {
             throw new Error(error.message);
         }
         

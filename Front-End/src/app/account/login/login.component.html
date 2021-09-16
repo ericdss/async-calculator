@@ -1,0 +1,24 @@
+<div class="main-container d-flex justify-content-center align-items-center">
+    <form #formLogin="ngForm" (ngSubmit)="onSubmit()" class="col-md-4 mx-3">
+        <div class="mb-3">
+            <label for="email" class="form-label">Email address</label>
+            <input type="email" name="email" id="email" class="form-control" [(ngModel)]="user.email" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" name="password" id="password" class="form-control" autocomplete="on" [(ngModel)]="user.password" required>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                <input type="submit" value="Sign In" class="btn btn-dark text-white col-12">
+            </div>
+    
+            <div class="col-6">
+                <button type="button" class="btn btn-secondary text-white col-12" [routerLink]="['/register']">Sign Up</button>
+            </div>
+        </div>
+        
+    </form>
+</div>

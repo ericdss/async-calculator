@@ -1,0 +1,44 @@
+<div class="main-container d-flex flex-column align-items-center justify-content-center">
+
+    <!-- CALCULATE -->
+    <form #formLogin="ngForm" (ngSubmit)="createSum()" class="col-md-3 mx-3">
+
+        <h3 class="mb-5 text-center">Calculation</h3>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text">ID: </span>
+            <input type="text" name="resultId" class="form-control" disabled [(ngModel)]="resultId">
+        </div>
+    
+        <div class="form-floating mb-3">
+            <input type="number" name="number1" id="number1" class="form-control" required [(ngModel)]="number1">
+            <label for="number1">Number 1</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input type="number" name="number2" id="number2" class="form-control" required [(ngModel)]="number2">
+            <label for="number2">Number 2</label>
+        </div>
+
+        <input type="submit" value="Calculate" class="btn btn-dark text-white col-12 mb-3">
+    </form>
+
+    <div class="border w-50 my-5"></div>
+
+    <!-- GET RESULT -->
+    <form #formLogin="ngForm" (ngSubmit)="getResult()" class="col-md-3 mx-3 mt-3">
+
+        <h3 class="mb-5 text-center">Result</h3>
+
+        <div class="mb-3">
+            <input type="text" name="txtId" id="txtId" class="form-control" placeholder="ID" required [(ngModel)]="txtId">
+        </div>
+
+        <div>
+            <textarea name="txaResult" id="txaResult" rows="7" style="resize: none;" class="col-12" disabled>{{ txaResult }}</textarea>
+        </div>
+
+        <input type="submit" value="Get Result" class="btn btn-dark text-white col-12 mb-3">
+    </form>
+    
+</div>

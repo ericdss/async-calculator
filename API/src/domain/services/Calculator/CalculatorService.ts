@@ -33,7 +33,7 @@ export class CalculatorService implements ICalculatorService{
                 finishDateTime: result.finishDateTime
             };
         }
-        catch (error) {
+        catch (error: any) {
             throw new Error(error.message);
         }
     }
@@ -67,7 +67,7 @@ export class CalculatorService implements ICalculatorService{
                 finishDateTime: result.finishDateTime
             };
         }
-        catch (error) {
+        catch (error: any) {
             throw new Error(error.message);
         }
     }

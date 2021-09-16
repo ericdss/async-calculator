@@ -44,3 +44,49 @@ msbuild.wrn
 
 # Visual Studio 2015
 .vs/
+
+# --------------------------- Angular ---------------------------
+
+# compiled output
+/Front-End/dist
+/Front-End/tmp
+/Front-End/out-tsc
+
+# Only exists if Bazel was run
+/Front-End/bazel-out
+
+# dependencies
+/Front-End/node_modules
+
+# profiling files
+chrome-profiler-events*.json
+
+# IDEs and editors
+/Front-End/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Visual Studio Code
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# misc
+/Front-End/.sass-cache
+/Front-End/connect.lock
+/Front-End/coverage
+/Front-End/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/Front-End/typings
+
+# System Files
+.DS_Store
+Thumbs.db

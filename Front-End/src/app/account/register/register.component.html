@@ -1,0 +1,29 @@
+<div class="main-container d-flex justify-content-center align-items-center">
+    <form #formRegisterUser="ngForm" (ngSubmit)="register()" class="col-md-4 mx-3">
+
+        <div class="row">
+            <div class="mb-3 col-6">
+                <label for="firstName" class="form-label">First Name</label>
+                <input type="text" name="firstName" id="firstName" class="form-control" [(ngModel)]="user.firstName" required>
+            </div>
+    
+            <div class="mb-3 col-6">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input type="text" name="lastName" id="lastName" class="form-control" [(ngModel)]="user.lastName" required>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email address</label>
+            <input type="email" name="email" id="email" class="form-control" placeholder="example@domain.com" [(ngModel)]="user.email" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" name="password" id="password" class="form-control" autocomplete="on" [(ngModel)]="user.password" required>
+            <span class="form-text text-white">Your password must be 8-16 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.</span>
+        </div>
+
+        <input type="submit" value="Send" class="btn btn-dark text-white col-12">
+    </form>
+</div>

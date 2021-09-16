@@ -1,0 +1,13 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
+body{
+    background: linear-gradient(90deg, rgba(0,36,126,1) 0%, rgba(58,86,223,1) 0%, rgba(30,170,227,1) 66%);
+    width: 100vw;
+    height: 100vh;
+}
+.main-container {
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+}
