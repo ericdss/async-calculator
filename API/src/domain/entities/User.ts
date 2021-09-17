@@ -24,7 +24,7 @@ export class User extends Entity{
         this.fullName = fullName;
         this.email = email;
         this.password = password;
-        this.roles = roles;
+        this.roles = roles && roles.length > 0 ? roles : ["user"];
 
         if(!creationDateTime)
             this.creationDateTime = new Date();

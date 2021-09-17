@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { catchError, map } from "rxjs/operators";
+import { catchError, last, map } from "rxjs/operators";
 import { throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -27,7 +27,12 @@ export class RegisterComponent implements OnInit {
 
   register(){
     try {
-      this.authsService.register(this.user)
+      const formattedUser = {
+        fullName: this.user.firstName.trim() + " " + this.user.lastName.trim(),
+        email: this.user.email.trim(),
+        password: this.user.password
+      }
+      this.authsService.register(formattedUser)
       .pipe(
         catchError(this.serviceError)
       )

@@ -45,11 +45,13 @@ export class CalculatorComponent implements OnInit {
   }
 
   private structureResult(data: any): void{
+    const creationDateTime = new Date(data.creationDateTime);
+
     this.txaResult = `
       Number 1: ${data.number1},
       Number 2: ${data.number2},
       Result: ${data.result ? data.result : null},
       Status: ${data.status ? data.status : null}
-      Creation Date: ${data.creationDateTime}`;
+      Creation Date: ${creationDateTime.toLocaleDateString('pt-BR', {timeZone: 'UTC'}) + " " + creationDateTime.toLocaleTimeString('pt-BR')}`;
   }
 }
