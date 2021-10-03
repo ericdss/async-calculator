@@ -7,7 +7,8 @@
     "build": "babel src --out-dir dist --extensions \".js,.ts\" --copy-files --no-copy-ignored",
     "start": "node dist/application/server.js",
     "dev": "SET NODE_ENV=development & ts-node-dev --respawn --transpile-only --ignore-watch node_modules src/application/server.ts",
-    "test": "SET NODE_ENV=development & jest"
+    "test": "SET NODE_ENV=development & jest",
+    "watch": "babel src --watch --out-dir dist --extensions \".js,.ts\" --copy-files --no-copy-ignored"
   },
   "keywords": [],
   "author": "",

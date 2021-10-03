@@ -1,0 +1,89 @@
+version: "3.8"
+services: 
+    api:
+        build:
+          context: ./API
+          dockerfile: Dockerfile
+        environment:
+            - NODE_ENV=Production
+        restart: always
+        container_name: api
+        env_file:
+            - ./API/.env
+        depends_on:
+            - mongo
+            - rabbit
+        ports: 
+            - ${SERVER_PORT}:${SERVER_PORT}
+            - 9229:9229                             # porta padrão de debug do node.js
+        volumes:
+            - ./API/dist:/app/dist                  # faz uma "ligação" entre o diretório da máquina (host) e diretório do container (máquina:container). Dessa forma, todos os arquivos que tem em um diretório aparecem no outro.
+            - ./API/package.json:/app/package.json
+        working_dir: /app                       # define o diretorio de execução dos comandos da aplicação
+        command: "npm start"
+        logging: 
+            driver: "json-file"
+            options:
+              max-size: "10m"
+              max-file: "5"
+
+    worker:
+        build:
+          context: ./Worker
+          dockerfile: Dockerfile
+        restart: always
+        container_name: worker
+        environment:
+            AMQP_CONNECTIONSTRING: amqp://${AMQP_USER}:${AMQP_PASS}@${AMQP_HOST}:${AMQP_PORT}          
+            MONGOCONNECTION: mongodb://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_DATABASE}?authSource=admin        
+            DATABASENAME: ${DB_DATABASE}
+        depends_on: 
+            - mongo
+            - rabbit
+        logging: 
+            driver: "json-file"
+            options:
+              max-size: "10m"
+              max-file: "5"
+
+    front-end:
+        build:
+          context: ./Front-End
+          dockerfile: Dockerfile
+        restart: always        
+        container_name: front-end
+        ports: 
+            - 4200:80 # porta 80 pois foi a definida no nginx
+        logging:
+            driver: "json-file"
+            options:
+              max-size: "10m"
+              max-file: "5"
+    
+    mongo:
+        image: mongo:latest
+        restart: always
+        env_file:
+            - ./API/.env
+        container_name: mongo                                  # utilizado no momento de definir comunicação entre os containers (dependencias e host do container, por exemplo)
+        ports: 
+            - ${DB_PORT}:27017
+        environment:
+            MONGO_INITDB_DATABASE: ${DB_DATABASE}          
+            MONGO_INITDB_ROOT_USERNAME: ${DB_USER}         
+            MONGO_INITDB_ROOT_PASSWORD: ${DB_PASS}
+    
+    rabbit:
+        image: "rabbitmq:3.9-management-alpine"
+        restart: always
+        env_file:
+            - ./API/.env
+        container_name: rabbit
+        hostname: rabbit
+        labels:
+            NAME: "rabbitmq"
+        ports:
+            - ${AMQP_PORT}:${AMQP_PORT}
+            - 15672:15672
+        volumes:
+            - ./config/rabbit.conf:/etc/rabbitmq/rabbitmq.conf

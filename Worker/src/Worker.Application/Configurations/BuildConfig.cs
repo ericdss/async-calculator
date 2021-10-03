@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using System;
 using System.IO;
+using System.Reflection;
 
 namespace Worker.Application.Configurations
 {

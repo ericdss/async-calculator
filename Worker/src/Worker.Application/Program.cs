@@ -1,22 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
 using System;
-using System.IO;
-using System.Text;
-using System.Text.Json;
 using System.Threading;
 using Worker.Application.Configurations;
-using Worker.Application.DTO;
-using Worker.Application.interfaces;
 using Worker.Application.Services;
-using Worker.Domain.Interfaces;
-using Worker.Domain.Services;
-using Worker.Infra.Data.Repositories;
-
-// DI, Settings
 
 namespace Worker.Application
 {
@@ -31,12 +19,13 @@ namespace Worker.Application
                             {
                                 services.ResolveDependencies(configuration);
                             })
-                            .Build();   
+                            .Build();
+
+            System.Threading.Tasks.Task.Delay(10000).Wait(); // Hack to give the RabbitMQ container more time to initialize
 
             // Consumers
             var consumer = ActivatorUtilities.CreateInstance<ConsumerService>(host.Services);
             consumer.Run(queueName: "sum", workers: 3);
-
         }
 
         

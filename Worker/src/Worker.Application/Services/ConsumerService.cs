@@ -25,6 +25,7 @@ namespace Worker.Application.Services
         public void Run(string queueName, int workers)
         {
             string connectionString = Environment.GetEnvironmentVariable("AMQP_CONNECTIONSTRING") ?? _configuration["AMQP:ConnectionString"];
+            Console.WriteLine("RabbitMQ ConnectionString: " + connectionString);
 
             var factory = new ConnectionFactory(){ Uri = new Uri(connectionString) };
 
@@ -43,8 +44,11 @@ namespace Worker.Application.Services
                         BuildAndRunWorker(channel, $"Worker {i}", queueName);
                     }
 
+#if DEBUG
                     Console.WriteLine("Press [enter] to exit.");
                     Console.ReadLine();
+#endif
+                    Thread.Sleep(Timeout.Infinite);
                 }
             }
             catch (Exception e)
