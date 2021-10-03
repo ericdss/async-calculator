@@ -1,5 +1,5 @@
 version: "3.8"
-services: 
+services:
     api:
         build:
           context: ./API
@@ -15,11 +15,11 @@ services:
             - rabbit
         ports: 
             - ${SERVER_PORT}:${SERVER_PORT}
-            - 9229:9229                             # porta padrão de debug do node.js
+            - 9229:9229
         volumes:
-            - ./API/dist:/app/dist                  # faz uma "ligação" entre o diretório da máquina (host) e diretório do container (máquina:container). Dessa forma, todos os arquivos que tem em um diretório aparecem no outro.
+            - ./API/dist:/app/dist
             - ./API/package.json:/app/package.json
-        working_dir: /app                       # define o diretorio de execução dos comandos da aplicação
+        working_dir: /app
         command: "npm start"
         logging: 
             driver: "json-file"
@@ -34,13 +34,13 @@ services:
         restart: always
         container_name: worker
         environment:
-            AMQP_CONNECTIONSTRING: amqp://${AMQP_USER}:${AMQP_PASS}@${AMQP_HOST}:${AMQP_PORT}          
-            MONGOCONNECTION: mongodb://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_DATABASE}?authSource=admin        
+            AMQP_CONNECTIONSTRING: amqp://${AMQP_USER}:${AMQP_PASS}@${AMQP_HOST}:${AMQP_PORT}
+            MONGOCONNECTION: mongodb://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_DATABASE}?authSource=admin   
             DATABASENAME: ${DB_DATABASE}
-        depends_on: 
+        depends_on:
             - mongo
             - rabbit
-        logging: 
+        logging:
             driver: "json-file"
             options:
               max-size: "10m"
@@ -50,10 +50,10 @@ services:
         build:
           context: ./Front-End
           dockerfile: Dockerfile
-        restart: always        
+        restart: always
         container_name: front-end
-        ports: 
-            - 4200:80 # porta 80 pois foi a definida no nginx
+        ports:
+            - 4200:80
         logging:
             driver: "json-file"
             options:
@@ -65,7 +65,7 @@ services:
         restart: always
         env_file:
             - ./API/.env
-        container_name: mongo                                  # utilizado no momento de definir comunicação entre os containers (dependencias e host do container, por exemplo)
+        container_name: mongo
         ports: 
             - ${DB_PORT}:27017
         environment:
